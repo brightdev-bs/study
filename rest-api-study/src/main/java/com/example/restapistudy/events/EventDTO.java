@@ -1,23 +1,16 @@
 package com.example.restapistudy.events;
 
-import lombok.*;
-import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Builder
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
-@AllArgsConstructor
-@NoArgsConstructor
-@Entity
-public class Event {
+@Builder @AllArgsConstructor @NoArgsConstructor
+@Data
+public class EventDTO {
 
-    @Id
-    @GeneratedValue
-    private Integer id;
     private String name;
     private String description;
     private LocalDateTime beginEnrollmentDateTime;
@@ -28,8 +21,5 @@ public class Event {
     private int basePrice;
     private int maxPrice; // (optional)
     private int limitOfEnrollment;
-    private boolean offline;
-    private boolean free;
-    @Enumerated(EnumType.STRING)
-    private EventStatus eventStatus = EventStatus.DRAFT;
+
 }
