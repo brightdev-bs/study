@@ -6,6 +6,7 @@
 *.class
 *.idea
 *.DS_Store
+out
 
 # Log file
 *.log
