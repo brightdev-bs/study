@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -46,8 +47,17 @@ public class EventController {
 
         Event event = modelMapper.map(eventDTO, Event.class);
         event.update();
+
         Event newEvent = this.eventRepository.save(event);
-        URI createdUri = linkTo(EventController.class).slash(newEvent.getId()).toUri();
-        return ResponseEntity.created(createdUri).body(event);
+
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(EventController.class).slash(newEvent.getId());
+
+        URI createdUri = selfLinkBuilder.toUri();
+
+        EventResource eventResource = new EventResource(newEvent);
+        eventResource.add(linkTo(EventController.class).withRel("query-events"));
+        eventResource.add(selfLinkBuilder.withRel("update-event"));
+        return ResponseEntity.created(createdUri).body(eventResource);
+
     }
 }
