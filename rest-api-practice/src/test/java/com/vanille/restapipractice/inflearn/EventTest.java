@@ -1,18 +1,10 @@
 package com.vanille.restapipractice.inflearn;
 
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.stereotype.Repository;
 
-import javax.validation.constraints.Size;
-
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EventTest {
-
-    EventRepository eventRepository;
 
     @Test
     public void builder() {
@@ -36,16 +28,5 @@ public class EventTest {
 
         assertThat(event.getName()).isEqualTo(name);
         assertThat(event.getDescription()).isEqualTo(description);
-    }
-
-    @Test
-    public void created() {
-        Event event = Event.builder()
-                .name("KIM")
-                .description("birthday")
-                .build();
-
-        Event save = eventRepository.save(event);
-
     }
 }
