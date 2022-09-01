@@ -34,7 +34,7 @@ dependencies {
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
     // 로그
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
+//    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
 
 
     compileOnly 'org.projectlombok:lombok'
