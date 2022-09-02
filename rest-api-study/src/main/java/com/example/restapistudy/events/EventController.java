@@ -1,8 +1,10 @@
 package com.example.restapistudy.events;
 
+import com.example.restapistudy.common.ErrorResource;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
@@ -37,12 +39,12 @@ public class EventController {
     @PostMapping
     public ResponseEntity createEvent(@RequestBody @Valid EventDTO eventDTO, Errors errors) {
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
+            return badRequeest(errors);
         }
 
         eventValidator.validate(eventDTO, errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
+            return badRequeest(errors);
         }
 
         Event event = modelMapper.map(eventDTO, Event.class);
@@ -57,7 +59,12 @@ public class EventController {
         EventResource eventResource = new EventResource(newEvent);
         eventResource.add(linkTo(EventController.class).withRel("query-events"));
         eventResource.add(selfLinkBuilder.withRel("update-event"));
+        eventResource.add(Link.of("/docs/index.html#resources-events-created").withRel("profile"));
         return ResponseEntity.created(createdUri).body(eventResource);
 
+    }
+
+    private ResponseEntity<ErrorResource> badRequeest(Errors errors) {
+        return ResponseEntity.badRequest().body(new ErrorResource(errors));
     }
 }
