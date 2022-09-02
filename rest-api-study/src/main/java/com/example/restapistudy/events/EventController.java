@@ -1,5 +1,6 @@
 package com.example.restapistudy.events;
 
+import com.example.restapistudy.common.ErrorResource;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,12 @@ public class EventController {
     @PostMapping
     public ResponseEntity createEvent(@RequestBody @Valid EventDTO eventDTO, Errors errors) {
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
+            return badRequeest(errors);
         }
 
         eventValidator.validate(eventDTO, errors);
         if (errors.hasErrors()) {
-            return ResponseEntity.badRequest().body(errors);
+            return badRequeest(errors);
         }
 
         Event event = modelMapper.map(eventDTO, Event.class);
@@ -61,5 +62,9 @@ public class EventController {
         eventResource.add(Link.of("/docs/index.html#resources-events-created").withRel("profile"));
         return ResponseEntity.created(createdUri).body(eventResource);
 
+    }
+
+    private ResponseEntity<ErrorResource> badRequeest(Errors errors) {
+        return ResponseEntity.badRequest().body(new ErrorResource(errors));
     }
 }
