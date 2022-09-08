@@ -221,12 +221,31 @@ public class EventControllerTests {
         ;
     }
 
-    private void generateEvent(int index) {
+    private Event generateEvent(int index) {
         Event event = Event.builder()
                 .name("event " + index)
                 .description("test event")
                 .build();
 
-        this.eventRepository.save(event);
+        return this.eventRepository.save(event);
+    }
+
+    @Test
+    public void getEvent() throws Exception {
+        Event event = generateEvent(100);
+        this.mockMvc.perform(get("/api/events/{id}", event.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").exists())
+                .andExpect(jsonPath("id").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists())
+                .andDo(document("get-an-event"))
+        ;
+    }
+
+    @Test
+    public void getEvent404() throws Exception {
+        this.mockMvc.perform(get("/api/events/11102"))
+                .andExpect(status().isNotFound());
     }
 }
